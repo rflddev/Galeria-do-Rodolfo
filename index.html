@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Sharing Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 15px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .gallery-item {
+            flex: 1 1 calc(33.333% - 10px);
+            box-sizing: border-box;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        form input, form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form button {
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Galeria dos Limfus 🤤</h1>
+</header>
+<div class="container">
+    <form action="upload.php" method="POST" enctype="multipart/form-data">
+        <input type="file" name="photo" accept="image/*" required>
+        <input type="text" name="title" placeholder="Coloque a desgraça de um titulo" required>
+        <button type="submit">Jogar fotos</button>
+    </form>
+
+    <div class="gallery">
+        <?php
+        // Display uploaded photos
+        $photos = glob("uploads/*.{jpg,png,jpeg,gif}", GLOB_BRACE);
+        foreach ($photos as $photo) {
+            $titleFile = pathinfo($photo, PATHINFO_FILENAME) . ".txt";
+            $title = file_exists("titles/$titleFile") ? file_get_contents("titles/$titleFile") : "Untitled";
+            echo "<div class='gallery-item'>
+                    <img src='$photo' alt='$title'>
+                    <p>$title</p>
+                  </div>";
+        }
+        ?>
+    </div>
+</div>
+</body>
+</html>
